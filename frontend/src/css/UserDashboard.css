@@ -1,0 +1,41 @@
+.user-dashboard {
+  padding: 20px;
+  text-align: center;
+}
+
+.user-dashboard h1 {
+  margin-bottom: 20px;
+  font-size: 2em;
+  color: #333;
+}
+
+.user-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.user-action {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 5px;
+  background-color: #28a745;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.user-action:hover {
+  background-color: #218838;
+}
+
+.user-action:active {
+  background-color: #1e7e34;
+}
+
+.user-action:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.5);
+}

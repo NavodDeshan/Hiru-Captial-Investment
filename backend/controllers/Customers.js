@@ -1,0 +1,138 @@
+const Customer = require('../models/Customers'); // Adjust the path as needed
+const mongoose = require('mongoose');
+
+// Create a new customer
+const createCustomer = async (req, res) => {
+  try {
+    const { fullName, birthday, address, idNumber } = req.body;
+    const idImage = req.files?.idImage?.[0];
+    const electricityBillImage = req.files?.electricityBillImage?.[0];
+
+    // Validate required fields
+    if (!fullName || !birthday || !address || !idNumber || !idImage || !electricityBillImage) {
+      return res.status(400).json({ message: 'All fields are required!' });
+    }
+
+    const newCustomer = new Customer({
+      fullName,
+      birthday,
+      address,
+      idNumber,
+      idImage: idImage.path,
+      electricityBillImage: electricityBillImage.path,
+    });
+
+    await newCustomer.save();
+    res.status(201).json({ message: 'Customer added successfully!', customer: newCustomer });
+  } catch (error) {
+    console.error('Error adding customer:', error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+};
+
+// Get all customers
+const getAllCustomers = async (req, res) => {
+  try {
+    const customers = await Customer.find();
+    res.status(200).json(customers);
+  } catch (error) {
+    console.error('Error fetching customers:', error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+};
+
+// Get a single customer by ID
+const getCustomerById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate ID
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid customer ID!' });
+    }
+
+    const customer = await Customer.findById(id);
+
+    if (!customer) {
+      return res.status(404).json({ message: 'Customer not found!' });
+    }
+
+    res.status(200).json(customer);
+  } catch (error) {
+    console.error('Error fetching customer:', error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+};
+
+// Update a customer by ID
+const updateCustomer = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { fullName, birthday, address, idNumber } = req.body;
+    const idImage = req.files?.idImage?.[0];
+    const electricityBillImage = req.files?.electricityBillImage?.[0];
+
+    // Validate ID
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid customer ID!' });
+    }
+
+    const updatedData = {
+      fullName,
+      birthday,
+      address,
+      idNumber,
+    };
+
+    if (idImage) {
+      updatedData.idImage = idImage.path;
+    }
+
+    if (electricityBillImage) {
+      updatedData.electricityBillImage = electricityBillImage.path;
+    }
+
+    const updatedCustomer = await Customer.findByIdAndUpdate(id, updatedData, { new: true });
+
+    if (!updatedCustomer) {
+      return res.status(404).json({ message: 'Customer not found!' });
+    }
+
+    res.status(200).json({ message: 'Customer updated successfully!', customer: updatedCustomer });
+  } catch (error) {
+    console.error('Error updating customer:', error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+};
+
+// Delete a customer by ID
+const deleteCustomer = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate ID
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid customer ID!' });
+    }
+
+    // Find and delete customer
+    const deletedCustomer = await Customer.findByIdAndDelete(id);
+
+    if (!deletedCustomer) {
+      return res.status(404).json({ message: 'Customer not found!' });
+    }
+
+    res.status(200).json({ message: 'Customer deleted successfully!' });
+  } catch (error) {
+    console.error('Error deleting customer:', error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+};
+
+module.exports = {
+  createCustomer,
+  getAllCustomers,
+  getCustomerById,
+  updateCustomer,
+  deleteCustomer,
+};

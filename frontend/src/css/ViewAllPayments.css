@@ -1,0 +1,53 @@
+.view-all-payments {
+  padding: 20px;
+}
+
+.view-all-payments h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.view-all-payments table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.view-all-payments table, .view-all-payments th, .view-all-payments td {
+  border: 1px solid #ddd;
+}
+
+.view-all-payments th, .view-all-payments td {
+  padding: 8px;
+  text-align: left;
+}
+
+.view-all-payments th {
+  background-color: #f2f2f2;
+}
+
+.view-all-payments tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.view-all-payments tr:hover {
+  background-color: #f1f1f1;
+}
+
+.view-all-payments .error {
+  color: red;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.view-all-payments button {
+  padding: 5px 10px;
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.view-all-payments button:hover {
+  background-color: #c9302c;
+}

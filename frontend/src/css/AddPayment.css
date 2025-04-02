@@ -1,0 +1,58 @@
+.add-payment {
+  padding: 20px;
+}
+
+.add-payment h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.add-payment form {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.add-payment form label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.add-payment form input,
+.add-payment form select {
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.add-payment form button {
+  padding: 12px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.add-payment form button:hover {
+  background-color: #218838;
+}
+
+.status-message {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.status-message.success {
+  color: green;
+}
+
+.status-message.error {
+  color: red;
+}

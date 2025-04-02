@@ -1,0 +1,114 @@
+.add-loan {
+    max-width: 400px;
+    margin: 0 auto;
+    margin-top: 140px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .add-loan h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .add-loan-form .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .add-loan-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .add-loan-form input,
+  .add-loan-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .add-loan-form textarea {
+    resize: none;
+  }
+  
+  .add-loan-form .submit-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-loan-form .submit-button:hover {
+    background-color: #0056b3;
+  }
+
+.add-loan {
+  padding: 20px;
+}
+
+.add-loan h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.add-loan form {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.add-loan form .form-group {
+  margin-bottom: 15px;
+}
+
+.add-loan form label {
+  margin-bottom: 5px;
+}
+
+.add-loan form input,
+.add-loan form select {
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.add-loan form button {
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-loan form button:hover {
+  background-color: #218838;
+}
+
+.status-message {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.status-message.success {
+  color: green;
+}
+
+.status-message.error {
+  color: red;
+}
