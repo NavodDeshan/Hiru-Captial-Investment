@@ -1,69 +1,73 @@
+/* General Dashboard Styling */
 .admin-dashboard {
-  padding: 40px;
-  background-color: #f8f9fa; /* Light background color */
-  border-radius: 10px; /* Rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  max-width: 5000px; /* Adjusted max-width */
-  margin: 0 auto; /* Center the dashboard */
-  min-height: 100vh; /* Ensure the container takes up the full height of the viewport */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start; /* Align items to the top */
-  position: relative; /* Position relative for absolute positioning of the heading */
+  padding: 20px;
+  text-align: center;
+  background-color: #f4f6f9;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
 }
 
 .admin-dashboard h1 {
-  position: absolute; /* Position the heading absolutely */
-  top: 20px; /* Distance from the top */
-  left: 20px; /* Distance from the left */
-  font-size: 2.5em; /* Larger font size */
-  color: #333;
-  font-weight: bold; /* Bold text */
-  margin: 0; /* Remove default margin */
+  margin-bottom: 20px;
+  font-size: 2.5em;
+  color: #2c3e50;
+  font-weight: bold;
 }
 
+/* Admin Profile Section */
+.admin-profile {
+  margin: 0 auto 30px auto;
+  padding: 20px;
+  max-width: 600px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-profile h2 {
+  margin-bottom: 15px;
+  font-size: 1.8em;
+  color: #34495e;
+}
+
+.admin-profile p {
+  margin: 10px 0;
+  font-size: 1.1em;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* Admin Actions Section */
 .admin-actions {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px; /* Increased gap */
-  margin-top: 250px; /* Add margin to avoid overlap with the heading */
+  gap: 15px;
+  margin-top: 30px;
 }
 
 .admin-action {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 200px; /* Increased width */
-  height: 150px; /* Increased height */
-  padding: 20px; /* Increased padding */
-  margin: 10px; /* Increased margin */
-  background-color: #007bff;
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: #3498db;
   color: white;
   text-decoration: none;
-  border-radius: 8px; /* More rounded corners */
-  transition: background-color 0.3s ease, transform 0.2s ease; /* Added transform transition */
-  font-size: 1.2em; /* Slightly larger font size */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-}
-
-.admin-action i {
-  font-size: 2em; /* Icon size */
-  margin-bottom: 10px; /* Space between icon and text */
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .admin-action:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px); /* Slight lift on hover */
+  background-color: #2980b9;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
 .admin-action:active {
-  background-color: #004494;
-  transform: translateY(0); /* Reset lift on active */
-}
-
-.admin-action:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+  background-color: #1e6a8c;
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
