@@ -7,6 +7,11 @@ const registerUser = async (req, res) => {
   try {
     const { username, email, password, nic, role } = req.body;
 
+    // Validate required fields
+    if (!username || !email || !password || !nic || !role) {
+      return res.status(400).json({ message: 'All fields are required!' });
+    }
+
     // Check if the user already exists by email
     const existingUser = await Users.findOne({ email });
     if (existingUser) {
@@ -26,9 +31,9 @@ const registerUser = async (req, res) => {
     });
 
     // Save the new user to the database
-    await newUser.save();
+    const savedUser = await newUser.save();
 
-    res.status(201).json({ message: 'User registered successfully!', user: newUser });
+    res.status(201).json({ message: 'User registered successfully!', user: savedUser });
   } catch (error) {
     console.error('Error registering user:', error);
     res.status(500).json({ message: 'Server error' });
@@ -39,6 +44,11 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    // Validate required fields
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required!' });
+    }
 
     // Find user by email
     const user = await Users.findOne({ email });
@@ -55,7 +65,6 @@ const loginUser = async (req, res) => {
     // Generate JWT token for authenticated user
     const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    // Send a success response with the token
     res.status(200).json({ message: 'Login successful', token, user });
   } catch (error) {
     console.error('Error logging in:', error);
@@ -78,10 +87,16 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const userId = req.params.id;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required!' });
+    }
+
     const user = await Users.findById(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found!' });
     }
+
     res.status(200).json(user);
   } catch (error) {
     console.error('Error fetching user:', error);
@@ -93,7 +108,17 @@ const getUserById = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required!' });
+    }
+
     const { username, email, nic, role } = req.body;
+
+    // Validate required fields
+    if (!username || !email || !nic || !role) {
+      return res.status(400).json({ message: 'All fields are required!' });
+    }
 
     // Find and update the user
     const updatedUser = await Users.findByIdAndUpdate(
@@ -118,6 +143,10 @@ const deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;
 
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required!' });
+    }
+
     // Find and delete the user
     const deletedUser = await Users.findByIdAndDelete(userId);
 
@@ -132,6 +161,28 @@ const deleteUser = async (req, res) => {
   }
 };
 
+// Get user profile by ID
+const getUserProfile = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required!' });
+    }
+
+    // Find the user by ID and select only specific fields
+    const user = await Users.findById(userId).select('username email role');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found!' });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -139,4 +190,5 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
+  getUserProfile,
 };

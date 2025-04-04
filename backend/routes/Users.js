@@ -21,4 +21,6 @@ router.put('/user/:id', userAuth, UserController.updateUser); // Protect this ro
 // Route to delete a user
 router.delete('/user/:id', adminAuth, UserController.deleteUser); // Protect this route with adminAuth middleware
 
+router.get('/user/profile/:id', userAuth, UserController.getUserProfile); // Protect this route with userAuth middleware
+
 module.exports = router;
