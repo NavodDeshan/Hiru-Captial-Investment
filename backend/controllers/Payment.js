@@ -1,6 +1,22 @@
 const Payment = require('../models/Payment'); // Adjust the path as needed
 const Loan = require('../models/Loan'); // Adjust the path as needed
 
+// Helper function to update loan payments
+const updateLoanPayments = async (LoanID) => {
+  const loan = await Loan.findById(LoanID);
+  if (loan) {
+    const payments = await Payment.find({ LoanID });
+    loan.totalPayment = parseFloat(
+      payments.reduce((total, payment) => total + parseFloat(payment.Amount), 0).toFixed(2)
+    );
+    loan.duePayment = Math.max(
+      (loan.amount + (loan.amount * loan.installmentrate / 100)) - loan.totalPayment,
+      0
+    );
+    await loan.save();
+  }
+};
+
 // Create a new payment
 const createPayment = async (req, res) => {
   try {
@@ -23,12 +39,7 @@ const createPayment = async (req, res) => {
     await newPayment.save();
 
     // Update the loan's total payment and due payment
-    const loan = await Loan.findById(LoanID);
-    if (loan) {
-      loan.totalPayment += parseFloat(Amount);
-      loan.duePayment = (loan.amount + (loan.amount * loan.interest / 100)) - loan.totalPayment;
-      await loan.save();
-    }
+    await updateLoanPayments(LoanID);
 
     res.status(201).json({ message: 'Payment created successfully!', payment: newPayment });
   } catch (error) {
@@ -83,13 +94,7 @@ const updatePayment = async (req, res) => {
     }
 
     // Update the loan's total payment and due payment
-    const loan = await Loan.findById(LoanID);
-    if (loan) {
-      const payments = await Payment.find({ LoanID });
-      loan.totalPayment = payments.reduce((total, payment) => total + parseFloat(payment.Amount), 0);
-      loan.duePayment = (loan.amount + (loan.amount * loan.interest / 100)) - loan.totalPayment;
-      await loan.save();
-    }
+    await updateLoanPayments(LoanID);
 
     res.status(200).json({ message: 'Payment updated successfully!', payment: updatedPayment });
   } catch (error) {
@@ -108,18 +113,31 @@ const deletePayment = async (req, res) => {
     }
 
     // Update the loan's total payment and due payment
-    const loan = await Loan.findById(deletedPayment.LoanID);
-    if (loan) {
-      const payments = await Payment.find({ LoanID: deletedPayment.LoanID });
-      loan.totalPayment = payments.reduce((total, payment) => total + parseFloat(payment.Amount), 0);
-      loan.duePayment = (loan.amount + (loan.amount * loan.interest / 100)) - loan.totalPayment;
-      await loan.save();
-    }
+    await updateLoanPayments(deletedPayment.LoanID);
 
     res.status(200).json({ message: 'Payment deleted successfully!' });
   } catch (error) {
     console.error('Error deleting payment:', error);
     res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+};
+
+// Add a payment
+const addPayment = async (req, res) => {
+  try {
+    const { LoanID, Amount } = req.body;
+
+    // Save the payment
+    const payment = new Payment(req.body);
+    await payment.save();
+
+    // Update the loan's total payment and due payment
+    await updateLoanPayments(LoanID);
+
+    res.status(201).json({ message: 'Payment added successfully and loan updated', payment });
+  } catch (error) {
+    console.error('Error adding payment:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
@@ -129,4 +147,6 @@ module.exports = {
   getPaymentById,
   updatePayment,
   deletePayment,
+  addPayment,
 };
+

@@ -1,4 +1,5 @@
 const Customer = require('../models/Customers'); // Adjust the path as needed
+const Payment = require('../models/Payment'); // Import the Payment model
 const mongoose = require('mongoose');
 
 // Create a new customer
@@ -60,6 +61,33 @@ const getCustomerById = async (req, res) => {
     res.status(200).json(customer);
   } catch (error) {
     console.error('Error fetching customer:', error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+};
+
+// Get payment history for a specific customer
+// Get payment history for a specific customer by full name
+const getCustomerPaymentHistory = async (req, res) => {
+  try {
+    const { fullName } = req.params;
+
+    // Find customer by full name
+    const customer = await Customer.findOne({ fullName });
+
+    if (!customer) {
+      return res.status(404).json({ message: 'Customer not found!' });
+    }
+
+    // Find payments associated with the customer
+    const payments = await Payment.find({ idNumber: customer.idNumber });
+
+    if (!payments || payments.length === 0) {
+      return res.status(404).json({ message: 'No payment history found for this customer!' });
+    }
+
+    res.status(200).json(payments);
+  } catch (error) {
+    console.error('Error fetching payment history:', error);
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };
@@ -133,6 +161,7 @@ module.exports = {
   createCustomer,
   getAllCustomers,
   getCustomerById,
+  getCustomerPaymentHistory, // Export the new function
   updateCustomer,
   deleteCustomer,
 };
