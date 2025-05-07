@@ -6,6 +6,11 @@ const PaymentSchema = new mongoose.Schema({
     ref: 'Loan',
     required: true,
   },
+  customerID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Customer', // Reference to the Customer model
+    required: true,
+  },
   fullName: {
     type: String,
     required: true,
@@ -24,6 +29,10 @@ const PaymentSchema = new mongoose.Schema({
   },
   RiderID: {
     type: String,
+  },
+  date: {
+    type: Date,
+    default: Date.now, // Automatically set the date to the current date when the payment is created
   },
 });
 

@@ -6,11 +6,13 @@ import './../css/AddPayment.css'; // Correct path to AddPayment.css
 const AddPayment = () => {
   const [formData, setFormData] = useState({
     LoanID: '',
+    customerID: '', // Added customerID field
     fullName: '',
     address: '',
     idNumber: '',
     Amount: '',
     RiderID: '',
+    date: '', // Added date field
   });
   const [customers, setCustomers] = useState([]);
   const [loans, setLoans] = useState([]);
@@ -38,6 +40,7 @@ const AddPayment = () => {
       if (selectedCustomer) {
         setFormData((prevData) => ({
           ...prevData,
+          customerID: selectedCustomer._id, // Set customerID
           idNumber: selectedCustomer.idNumber,
           address: selectedCustomer.address,
         }));
@@ -61,9 +64,7 @@ const AddPayment = () => {
       if (selectedLoan) {
         setFormData((prevData) => ({
           ...prevData,
-          fullName: selectedLoan.fullname,
-          idNumber: selectedLoan.nic,
-          address: selectedLoan.address,
+          LoanID: selectedLoan._id,
         }));
       }
     }
@@ -91,11 +92,13 @@ const AddPayment = () => {
       // Clear the form
       setFormData({
         LoanID: '',
+        customerID: '', // Clear customerID
         fullName: '',
         address: '',
         idNumber: '',
         Amount: '',
         RiderID: '',
+        date: '', // Clear date
       });
     } catch (error) {
       console.error('Error:', error);
@@ -109,6 +112,7 @@ const AddPayment = () => {
 
     // Add receipt content
     doc.setFontSize(16);
+    doc.text('Hiru Capital Investment', 20, 30);
     doc.text('Payment Receipt', 20, 20);
     doc.setFontSize(12);
     doc.text(`Full Name: ${data.fullName}`, 20, 40);
@@ -117,7 +121,7 @@ const AddPayment = () => {
     doc.text(`ID Number: ${data.idNumber}`, 20, 70);
     doc.text(`Amount: ${data.Amount}`, 20, 80);
     doc.text(`Rider ID: ${data.RiderID || 'N/A'}`, 20, 90);
-    doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 100);
+    doc.text(`Date: ${data.date}`, 20, 100); // Use the provided payment date
 
     // Save the receipt as a PDF
     doc.save('Payment_Receipt.pdf');
@@ -209,6 +213,17 @@ const AddPayment = () => {
             name="RiderID"
             value={formData.RiderID}
             onChange={handleChange}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="date">Payment Date</label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            value={formData.date}
+            onChange={handleChange}
+            required
           />
         </div>
         <button type="submit">Add Payment</button>

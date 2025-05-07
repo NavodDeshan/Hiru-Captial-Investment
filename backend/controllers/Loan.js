@@ -10,6 +10,12 @@ const createLoan = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required!' });
     }
 
+    // Check if a loan already exists for the given CustomerID
+    const existingLoan = await Loan.findOne({ CustomerID });
+    if (existingLoan) {
+      return res.status(400).json({ message: 'A loan already exists for this customer!' });
+    }
+
     const newLoan = new Loan({
       CustomerID,
       fullname,

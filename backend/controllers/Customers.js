@@ -26,11 +26,14 @@ const createCustomer = async (req, res) => {
     await newCustomer.save();
     res.status(201).json({ message: 'Customer added successfully!', customer: newCustomer });
   } catch (error) {
+    if (error.code === 11000 && error.keyPattern?.idNumber) {
+      // Handle duplicate idNumber error
+      return res.status(400).json({ message: 'ID Number must be unique!' });
+    }
     console.error('Error adding customer:', error);
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };
-
 // Get all customers
 const getAllCustomers = async (req, res) => {
   try {
@@ -79,7 +82,7 @@ const getCustomerPaymentHistory = async (req, res) => {
     }
 
     // Find payments associated with the customer
-    const payments = await Payment.find({ idNumber: customer.idNumber });
+    const payments = await Payment.find({ idNumber: customer.idNumber }).select('date Amount LoanID');
 
     if (!payments || payments.length === 0) {
       return res.status(404).json({ message: 'No payment history found for this customer!' });
