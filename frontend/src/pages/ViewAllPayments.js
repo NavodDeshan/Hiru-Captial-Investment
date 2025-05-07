@@ -75,6 +75,7 @@ const ViewAllPayments = () => {
               <th>ID Number</th>
               <th>Amount</th>
               <th>Rider ID</th>
+              <th>Date</th> {/* Added Date column */}
               <th>Actions</th>
             </tr>
           </thead>
@@ -88,6 +89,7 @@ const ViewAllPayments = () => {
                 <td>{payment.idNumber}</td>
                 <td>{payment.Amount}</td>
                 <td>{payment.RiderID || 'N/A'}</td>
+                <td>{payment.date ? new Date(payment.date).toLocaleDateString() : 'N/A'}</td> {/* Display formatted date */}
                 <td>
                   <button onClick={() => handleDelete(payment._id)}>Delete</button>
                 </td>
