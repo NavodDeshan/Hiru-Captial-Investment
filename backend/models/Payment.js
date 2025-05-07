@@ -32,7 +32,7 @@ const PaymentSchema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    default: Date.now, // Automatically set the date to the current date when the payment is created
+    required: true, // Make the date field required
   },
 });
 

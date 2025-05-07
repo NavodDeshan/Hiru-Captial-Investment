@@ -14,6 +14,12 @@ const createCustomer = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required!' });
     }
 
+    // Check for duplicate ID Number
+    const existingCustomer = await Customer.findOne({ idNumber });
+    if (existingCustomer) {
+      return res.status(400).json({ message: 'ID Number must be unique!' });
+    }
+
     const newCustomer = new Customer({
       fullName,
       birthday,
@@ -26,14 +32,11 @@ const createCustomer = async (req, res) => {
     await newCustomer.save();
     res.status(201).json({ message: 'Customer added successfully!', customer: newCustomer });
   } catch (error) {
-    if (error.code === 11000 && error.keyPattern?.idNumber) {
-      // Handle duplicate idNumber error
-      return res.status(400).json({ message: 'ID Number must be unique!' });
-    }
     console.error('Error adding customer:', error);
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };
+
 // Get all customers
 const getAllCustomers = async (req, res) => {
   try {
@@ -68,7 +71,6 @@ const getCustomerById = async (req, res) => {
   }
 };
 
-// Get payment history for a specific customer
 // Get payment history for a specific customer by full name
 const getCustomerPaymentHistory = async (req, res) => {
   try {
@@ -123,6 +125,12 @@ const updateCustomer = async (req, res) => {
       updatedData.electricityBillImage = electricityBillImage.path;
     }
 
+    // Check for duplicate ID Number (if updating the ID Number)
+    const existingCustomer = await Customer.findOne({ idNumber });
+    if (existingCustomer && existingCustomer._id.toString() !== id) {
+      return res.status(400).json({ message: 'ID Number must be unique!' });
+    }
+
     const updatedCustomer = await Customer.findByIdAndUpdate(id, updatedData, { new: true });
 
     if (!updatedCustomer) {
@@ -164,7 +172,7 @@ module.exports = {
   createCustomer,
   getAllCustomers,
   getCustomerById,
-  getCustomerPaymentHistory, // Export the new function
+  getCustomerPaymentHistory,
   updateCustomer,
   deleteCustomer,
 };

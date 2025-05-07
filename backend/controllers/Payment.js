@@ -88,6 +88,11 @@ const updatePayment = async (req, res) => {
   try {
     const { LoanID, fullName, address, idNumber, Amount, RiderID, date } = req.body;
 
+    // Validate required fields
+    if (!LoanID || !fullName || !address || !idNumber || !Amount || !date) {
+      return res.status(400).json({ message: 'LoanID, fullName, address, idNumber, Amount, and date are required!' });
+    }
+
     // Find the customer by idNumber
     const customer = await Customer.findOne({ idNumber });
     if (!customer) {
@@ -144,6 +149,11 @@ const deletePayment = async (req, res) => {
 const addPayment = async (req, res) => {
   try {
     const { LoanID, idNumber, Amount, date } = req.body;
+
+    // Validate required fields
+    if (!LoanID || !idNumber || !Amount || !date) {
+      return res.status(400).json({ message: 'LoanID, idNumber, Amount, and date are required!' });
+    }
 
     // Find the customer by idNumber
     const customer = await Customer.findOne({ idNumber });
