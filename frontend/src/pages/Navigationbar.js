@@ -7,7 +7,7 @@ const NavigationBar = () => {
     <nav className="navbar">
       <div className="navbar-brand">
         <Link to="/" className="navbar-logo">
-          Daily App
+          Hiru Capital Investment 
         </Link>
       </div>
       <ul className="navbar-links">
