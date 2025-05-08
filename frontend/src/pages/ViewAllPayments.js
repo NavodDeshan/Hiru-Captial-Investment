@@ -12,15 +12,22 @@ const ViewAllPayments = () => {
     const fetchPayments = async () => {
       try {
         const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+        if (!token) {
+          throw new Error('Authentication token is missing.');
+        }
+
         const response = await axios.get('http://localhost:5000/api/payment', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+
+        console.log('Payments Data:', response.data); // Debugging log
         setPayments(response.data);
         setLoading(false);
       } catch (err) {
-        setError('An error occurred while fetching payments.');
+        console.error('Error fetching payments:', err);
+        setError(err.response?.data?.message || 'An error occurred while fetching payments.');
         setLoading(false);
       }
     };
@@ -31,14 +38,20 @@ const ViewAllPayments = () => {
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+      if (!token) {
+        throw new Error('Authentication token is missing.');
+      }
+
       await axios.delete(`http://localhost:5000/api/payment/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setPayments(payments.filter(payment => payment._id !== id));
+
+      setPayments(payments.filter((payment) => payment._id !== id));
     } catch (err) {
-      setError('An error occurred while deleting the payment.');
+      console.error('Error deleting payment:', err);
+      setError(err.response?.data?.message || 'An error occurred while deleting the payment.');
     }
   };
 
@@ -49,17 +62,20 @@ const ViewAllPayments = () => {
         <p>Loading...</p>
       ) : error ? (
         <p className="error">{error}</p>
+      ) : payments.length === 0 ? (
+        <p>No payments found.</p>
       ) : (
         <table>
           <thead>
             <tr>
-              <th>ID</th>
+              <th>Payment ID</th>
               <th>Loan ID</th>
-              <th>Full Name</th>
-              <th>Address</th>
+              <th>Customer Name</th>
+              <th>Customer Address</th>
               <th>ID Number</th>
               <th>Amount</th>
               <th>Rider ID</th>
+              <th>Date</th> {/* Added Date column */}
               <th>Actions</th>
             </tr>
           </thead>
@@ -68,11 +84,12 @@ const ViewAllPayments = () => {
               <tr key={payment._id}>
                 <td>{payment._id}</td>
                 <td>{payment.LoanID}</td>
-                <td>{payment.fullName}</td>
-                <td>{payment.address}</td>
+                <td>{payment.customerID?.fullName || 'N/A'}</td> {/* Display customer name */}
+                <td>{payment.customerID?.address || 'N/A'}</td> {/* Display customer address */}
                 <td>{payment.idNumber}</td>
                 <td>{payment.Amount}</td>
-                <td>{payment.RiderID}</td>
+                <td>{payment.RiderID || 'N/A'}</td>
+                <td>{payment.date ? new Date(payment.date).toLocaleDateString() : 'N/A'}</td> {/* Display formatted date */}
                 <td>
                   <button onClick={() => handleDelete(payment._id)}>Delete</button>
                 </td>

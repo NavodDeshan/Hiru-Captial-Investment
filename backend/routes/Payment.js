@@ -13,6 +13,9 @@ router.get('/', adminAuth, PaymentController.getAllPayments);
 // Get a single payment by ID
 router.get('/:id', PaymentController.getPaymentById);
 
+// Get payments by customer ID
+
+
 // Update a payment
 router.put('/:id', PaymentController.updatePayment);
 

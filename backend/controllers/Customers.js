@@ -1,4 +1,5 @@
 const Customer = require('../models/Customers'); // Adjust the path as needed
+const Payment = require('../models/Payment'); // Import the Payment model
 const mongoose = require('mongoose');
 
 // Create a new customer
@@ -11,6 +12,12 @@ const createCustomer = async (req, res) => {
     // Validate required fields
     if (!fullName || !birthday || !address || !idNumber || !idImage || !electricityBillImage) {
       return res.status(400).json({ message: 'All fields are required!' });
+    }
+
+    // Check for duplicate ID Number
+    const existingCustomer = await Customer.findOne({ idNumber });
+    if (existingCustomer) {
+      return res.status(400).json({ message: 'ID Number must be unique!' });
     }
 
     const newCustomer = new Customer({
@@ -64,6 +71,32 @@ const getCustomerById = async (req, res) => {
   }
 };
 
+// Get payment history for a specific customer by full name
+const getCustomerPaymentHistory = async (req, res) => {
+  try {
+    const { fullName } = req.params;
+
+    // Find customer by full name
+    const customer = await Customer.findOne({ fullName });
+
+    if (!customer) {
+      return res.status(404).json({ message: 'Customer not found!' });
+    }
+
+    // Find payments associated with the customer
+    const payments = await Payment.find({ idNumber: customer.idNumber }).select('date Amount LoanID');
+
+    if (!payments || payments.length === 0) {
+      return res.status(404).json({ message: 'No payment history found for this customer!' });
+    }
+
+    res.status(200).json(payments);
+  } catch (error) {
+    console.error('Error fetching payment history:', error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+};
+
 // Update a customer by ID
 const updateCustomer = async (req, res) => {
   try {
@@ -90,6 +123,12 @@ const updateCustomer = async (req, res) => {
 
     if (electricityBillImage) {
       updatedData.electricityBillImage = electricityBillImage.path;
+    }
+
+    // Check for duplicate ID Number (if updating the ID Number)
+    const existingCustomer = await Customer.findOne({ idNumber });
+    if (existingCustomer && existingCustomer._id.toString() !== id) {
+      return res.status(400).json({ message: 'ID Number must be unique!' });
     }
 
     const updatedCustomer = await Customer.findByIdAndUpdate(id, updatedData, { new: true });
@@ -133,6 +172,7 @@ module.exports = {
   createCustomer,
   getAllCustomers,
   getCustomerById,
+  getCustomerPaymentHistory,
   updateCustomer,
   deleteCustomer,
 };
