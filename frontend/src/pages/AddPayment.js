@@ -6,13 +6,14 @@ import './../css/AddPayment.css'; // Correct path to AddPayment.css
 const AddPayment = () => {
   const [formData, setFormData] = useState({
     LoanID: '',
-    customerID: '', // Added customerID field
+    customerID: '',
     fullName: '',
     address: '',
     idNumber: '',
     Amount: '',
     RiderID: '',
-    date: '', // Added date field
+    date: '',
+    time: '', // Add time field
   });
   const [customers, setCustomers] = useState([]);
   const [loans, setLoans] = useState([]);
@@ -40,7 +41,7 @@ const AddPayment = () => {
       if (selectedCustomer) {
         setFormData((prevData) => ({
           ...prevData,
-          customerID: selectedCustomer._id, // Set customerID
+          customerID: selectedCustomer._id,
           idNumber: selectedCustomer.idNumber,
           address: selectedCustomer.address,
         }));
@@ -92,13 +93,14 @@ const AddPayment = () => {
       // Clear the form
       setFormData({
         LoanID: '',
-        customerID: '', // Clear customerID
+        customerID: '',
         fullName: '',
         address: '',
         idNumber: '',
         Amount: '',
         RiderID: '',
-        date: '', // Clear date
+        date: '',
+      
       });
     } catch (error) {
       console.error('Error:', error);
@@ -109,6 +111,11 @@ const AddPayment = () => {
   // Function to generate receipt
   const generateReceipt = (data) => {
     const doc = new jsPDF();
+
+    // Get current date and time for receipt issue
+    const now = new Date();
+    const issueDate = now.toLocaleDateString();
+    const issueTime = now.toLocaleTimeString();
 
     // Add receipt content
     doc.setFontSize(16);
@@ -121,7 +128,8 @@ const AddPayment = () => {
     doc.text(`ID Number: ${data.idNumber}`, 20, 70);
     doc.text(`Amount: ${data.Amount}`, 20, 80);
     doc.text(`Rider ID: ${data.RiderID || 'N/A'}`, 20, 90);
-    doc.text(`Date: ${data.date}`, 20, 100); // Use the provided payment date
+    doc.text(`Payment Date: ${data.date}`, 20, 100);
+    doc.text(`Receipt Issued At: ${issueDate} ${issueTime}`, 20, 110); // Add receipt issue time
 
     // Save the receipt as a PDF
     doc.save('Payment_Receipt.pdf');
@@ -226,6 +234,7 @@ const AddPayment = () => {
             required
           />
         </div>
+       
         <button type="submit">Add Payment</button>
       </form>
     </div>
