@@ -1,51 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './../css/NavigationBar.css'; // Include CSS for styling
 
 const NavigationBar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); // Track login status
+
+  const handleLogout = () => {
+    localStorage.clear(); // Clear all items from localStorage
+    setIsLoggedIn(false); // Update state to reflect logout
+    window.location.href = '/'; // Redirect to the login page
+  };
+
+  useEffect(() => {
+    // Listen for changes in localStorage to update login status
+    const handleStorageChange = () => {
+      setIsLoggedIn(!!localStorage.getItem('token'));
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
   return (
     <nav className="navbar">
       <div className="navbar-brand">
         <Link to="/" className="navbar-logo">
-          Hiru Capital Investment 
+          Hiru Capital Investment
         </Link>
       </div>
       <ul className="navbar-links">
-        <li>
-          <Link to="/AddLoan" className="navbar-link">
-            Loan
-          </Link>
-        </li>
-        <li>
-          <Link to="/ViewAllLoans" className="navbar-link">
-            My Collection
-          </Link>
-        </li>
-        <li>
-          <Link to="/AddPayment" className="navbar-link">
-            Payment
-          </Link>
-        </li>
-        <li>
-          <Link to="/AddCustomers" className="navbar-link">
-            Add Customers
-          </Link>
-        </li>
-        <li>
-          <Link to="/ViewAllCustomers" className="navbar-link">
-            View All Customers
-          </Link>
-        </li>
-        <li>
-          <Link to="/" className="navbar-link">
-            Login
-          </Link>
-        </li>
-        <li>
-          <Link to="/register" className="navbar-link">
-            Register
-          </Link>
-        </li>
+        {isLoggedIn ? (
+          // Show only Logout button if the user is logged in
+          <li>
+            <button className="navbar-link logout-button" onClick={handleLogout}>
+              Logout
+            </button>
+          </li>
+        ) : (
+          // Show only Login and Register links if the user is not logged in
+          <>
+            <li>
+              <Link to="/" className="navbar-link">
+                Login
+              </Link>
+            </li>
+            <li>
+              <Link to="/register" className="navbar-link">
+                Register
+              </Link>
+            </li>
+          </>
+        )}
       </ul>
     </nav>
   );

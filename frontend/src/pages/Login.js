@@ -57,7 +57,7 @@ const Login = () => {
     <div className="background">
       <div className="login-container">
         <h2>Login</h2>
-        <form onSubmit={handleSubmit}>
+        <form className="transparent-form" onSubmit={handleSubmit}>
           {/* Email Input */}
           <div className="form-group">
             <label htmlFor="email">Email</label>
