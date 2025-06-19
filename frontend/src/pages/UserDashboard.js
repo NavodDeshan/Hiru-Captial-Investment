@@ -55,13 +55,7 @@ const UserDashboard = () => {
     fetchUserProfile();
   }, [navigate]); // Include navigate in dependency array
 
-  const handleLogout = () => {
-    // Clear local storage
-    localStorage.removeItem('id');
-    localStorage.removeItem('token');
-    // Redirect to login page
-    navigate('/');
-  };
+ 
 
   if (loading) {
     return <div>Loading...</div>;
