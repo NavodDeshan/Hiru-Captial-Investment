@@ -22,7 +22,7 @@ const ViewAllUsers = () => {
         }
 
         // Send GET request to the backend with the Authorization header
-        const response = await axios.get('http://localhost:5000/api/users/users', {
+        const response = await axios.get('https://hiru-captial-investment.onrender.com/api/users/users', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -47,7 +47,7 @@ const ViewAllUsers = () => {
         return;
       }
 
-      await axios.delete(`http://localhost:5000/api/users/user/${id}`, {
+      await axios.delete(`https://hiru-captial-investment.onrender.com/api/users/user/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -72,7 +72,7 @@ const ViewAllUsers = () => {
         return;
       }
 
-      await axios.put(`http://localhost:5000/api/users/user/${editUser._id}`, editUser, {
+      await axios.put(`https://hiru-captial-investment.onrender.com/api/users/user/${editUser._id}`, editUser, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

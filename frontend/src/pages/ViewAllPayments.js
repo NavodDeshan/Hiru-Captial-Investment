@@ -16,7 +16,7 @@ const ViewAllPayments = () => {
           throw new Error('Authentication token is missing.');
         }
 
-        const response = await axios.get('http://localhost:5000/api/payment', {
+        const response = await axios.get('https://hiru-captial-investment.onrender.com/api/payment', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -42,7 +42,7 @@ const ViewAllPayments = () => {
         throw new Error('Authentication token is missing.');
       }
 
-      await axios.delete(`http://localhost:5000/api/payment/${id}`, {
+      await axios.delete(`https://hiru-captial-investment.onrender.com/api/payment/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

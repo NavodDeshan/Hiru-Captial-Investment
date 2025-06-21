@@ -27,7 +27,7 @@ const AddLoan = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/customers');
+        const response = await axios.get('https://hiru-captial-investment.onrender.com/api/customers');
         setCustomers(response.data);
       } catch (error) {
         console.error('Error fetching customers:', error);
@@ -56,7 +56,7 @@ const AddLoan = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/loan/createLoan', formData, {
+      const response = await axios.post('https://hiru-captial-investment.onrender.com/api/loan/createLoan', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
