@@ -80,7 +80,7 @@ const AddCustomers = () => {
     formDataToSend.append('electricityBillImage', formData.electricityBillImage);
 
     try {
-      const response = await fetch('http://localhost:5000/api/customers', {
+      const response = await fetch('https://hiru-captial-investment.onrender.com/api/customers', {
         method: 'POST',
         body: formDataToSend,
       });

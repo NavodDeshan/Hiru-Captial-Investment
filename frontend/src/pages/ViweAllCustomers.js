@@ -14,7 +14,7 @@ const ViewAllCustomers = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/customers');
+        const response = await axios.get('https://hiru-captial-investment.onrender.com/api/customers');
         setCustomers(response.data);
         setLoading(false);
       } catch (err) {
@@ -30,7 +30,7 @@ const ViewAllCustomers = () => {
     setPaymentLoading(true);
     setPaymentError('');
     try {
-      const response = await axios.get(`http://localhost:5000/api/customers/${fullName}/payments`);
+      const response = await axios.get(`https://hiru-captial-investment.onrender.com/api/customers/${fullName}/payments`);
       setPaymentHistory(response.data); // Store the payment history
       setSelectedCustomer(fullName); // Set the selected customer
       setPaymentLoading(false);
@@ -61,13 +61,13 @@ const ViewAllCustomers = () => {
               {customer.idImage && (
                 <div className="image-section">
                   <strong>ID Image:</strong>
-                  <img src={`http://localhost:5000/${customer.idImage}`} alt={`${customer.fullName}'s ID`} />
+                  <img src={`https://hiru-captial-investment.onrender.com/${customer.idImage}`} alt={`${customer.fullName}'s ID`} />
                 </div>
               )}
               {customer.electricityBillImage && (
                 <div className="image-section">
                   <strong>Electricity Bill:</strong>
-                  <img src={`http://localhost:5000/${customer.electricityBillImage}`} alt={`${customer.fullName}'s Electricity Bill`} />
+                  <img src={`https://hiru-captial-investment.onrender.com/${customer.electricityBillImage}`} alt={`${customer.fullName}'s Electricity Bill`} />
                 </div>
               )}
               {/* Button to fetch payment history */}
