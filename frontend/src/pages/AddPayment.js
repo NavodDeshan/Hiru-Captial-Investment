@@ -119,7 +119,7 @@ const AddPayment = () => {
 
     // Add receipt content
     doc.setFontSize(16);
-    doc.text('Hiru Capital Investment', 20, 30);
+    doc.text('Gayan Investment', 20, 30);
     doc.text('Payment Receipt', 20, 20);
     doc.setFontSize(12);
     doc.text(`Full Name: ${data.fullName}`, 20, 40);
