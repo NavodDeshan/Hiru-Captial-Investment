@@ -18,14 +18,7 @@ const CustomersSchema = new mongoose.Schema({
     required: true,
     unique: true, // Ensure idNumber is unique
   },
-  idImage: {
-    type: String,
-    required: true,
-  },
-  electricityBillImage: {
-    type: String,
-    required: true,
-  },
+
 });
 
 module.exports = mongoose.model('Customer', CustomersSchema);
