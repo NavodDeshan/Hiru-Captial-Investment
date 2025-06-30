@@ -6,11 +6,9 @@ const mongoose = require('mongoose');
 const createCustomer = async (req, res) => {
   try {
     const { fullName, birthday, address, idNumber } = req.body;
-    const idImage = req.files?.idImage?.[0];
-    const electricityBillImage = req.files?.electricityBillImage?.[0];
 
     // Validate required fields
-    if (!fullName || !birthday || !address || !idNumber || !idImage || !electricityBillImage) {
+    if (!fullName || !birthday || !address || !idNumber) {
       return res.status(400).json({ message: 'All fields are required!' });
     }
 
@@ -24,9 +22,7 @@ const createCustomer = async (req, res) => {
       fullName,
       birthday,
       address,
-      idNumber,
-      idImage: idImage.path,
-      electricityBillImage: electricityBillImage.path,
+      idNumber
     });
 
     await newCustomer.save();
@@ -102,8 +98,6 @@ const updateCustomer = async (req, res) => {
   try {
     const { id } = req.params;
     const { fullName, birthday, address, idNumber } = req.body;
-    const idImage = req.files?.idImage?.[0];
-    const electricityBillImage = req.files?.electricityBillImage?.[0];
 
     // Validate ID
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -114,16 +108,8 @@ const updateCustomer = async (req, res) => {
       fullName,
       birthday,
       address,
-      idNumber,
+      idNumber
     };
-
-    if (idImage) {
-      updatedData.idImage = idImage.path;
-    }
-
-    if (electricityBillImage) {
-      updatedData.electricityBillImage = electricityBillImage.path;
-    }
 
     // Check for duplicate ID Number (if updating the ID Number)
     const existingCustomer = await Customer.findOne({ idNumber });

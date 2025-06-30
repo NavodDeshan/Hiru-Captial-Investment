@@ -7,27 +7,17 @@ const AddCustomers = () => {
     birthday: '',
     address: '',
     idNumber: '',
-    idImage: null,
-    electricityBillImage: null,
   });
   const [statusMessage, setStatusMessage] = useState({ type: '', text: '' });
   const [errors, setErrors] = useState({}); // State to track validation errors
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (files) {
-      setFormData((prevData) => {
-        const updatedData = { ...prevData, [name]: files[0] };
-        console.log('Updated Form Data:', updatedData); // Debugging log
-        return updatedData;
-      });
-    } else {
-      setFormData((prevData) => {
-        const updatedData = { ...prevData, [name]: value };
-        console.log('Updated Form Data:', updatedData); // Debugging log
-        return updatedData;
-      });
-    }
+    const { name, value } = e.target;
+    setFormData((prevData) => {
+      const updatedData = { ...prevData, [name]: value };
+      console.log('Updated Form Data:', updatedData); // Debugging log
+      return updatedData;
+    });
   };
 
   const validateForm = () => {
@@ -51,15 +41,6 @@ const AddCustomers = () => {
       newErrors.idNumber = 'ID Number must be alphanumeric.';
     }
 
-    if (!formData.idImage) {
-      newErrors.idImage = 'ID Image is required.';
-    }
-
-    if (!formData.electricityBillImage) {
-      newErrors.electricityBillImage = 'Electricity Bill Image is required.';
-    }
-
-    console.log('Validation Errors:', newErrors); // Debugging log
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // Return true if no errors
   };
@@ -71,18 +52,11 @@ const AddCustomers = () => {
       return; // Stop submission if validation fails
     }
 
-    const formDataToSend = new FormData();
-    formDataToSend.append('fullName', formData.fullName);
-    formDataToSend.append('birthday', formData.birthday);
-    formDataToSend.append('address', formData.address);
-    formDataToSend.append('idNumber', formData.idNumber);
-    formDataToSend.append('idImage', formData.idImage);
-    formDataToSend.append('electricityBillImage', formData.electricityBillImage);
-
     try {
       const response = await fetch('https://hiru-captial-investment.onrender.com/api/customers', {
         method: 'POST',
-        body: formDataToSend,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
@@ -99,8 +73,6 @@ const AddCustomers = () => {
         birthday: '',
         address: '',
         idNumber: '',
-        idImage: null,
-        electricityBillImage: null,
       });
       setErrors({});
     } catch (error) {
@@ -168,26 +140,6 @@ const AddCustomers = () => {
             required
           />
           {errors.idNumber && <span className="error">{errors.idNumber}</span>}
-        </label>
-        <label>
-          ID Image:
-          <input
-            type="file"
-            name="idImage"
-            onChange={handleChange}
-            required
-          />
-          {errors.idImage && <span className="error">{errors.idImage}</span>}
-        </label>
-        <label>
-          Electricity Bill Image:
-          <input
-            type="file"
-            name="electricityBillImage"
-            onChange={handleChange}
-            required
-          />
-          {errors.electricityBillImage && <span className="error">{errors.electricityBillImage}</span>}
         </label>
         <button type="submit">Add Customer</button>
       </form>
