@@ -61,12 +61,6 @@ const LoanSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  duePayment: {
-    type: Number,
-    default: function() {
-      return this.amount + (this.amount * this.interest / 100);
-    },
-  },
   fine: {
     type: Number,
     default: 0,
@@ -80,6 +74,15 @@ const LoanSchema = new mongoose.Schema({
     required: true,
   },
 });
+
+// Virtual for duePayment
+LoanSchema.virtual('duePayment').get(function() {
+  return this.amount + (this.amount * (this.installmentrate / 100)) - this.totalPayment;
+});
+
+// Ensure virtuals are included in JSON output
+LoanSchema.set('toJSON', { virtuals: true });
+LoanSchema.set('toObject', { virtuals: true });
 
 // Method to calculate fine
 LoanSchema.methods.calculateFine = function() {

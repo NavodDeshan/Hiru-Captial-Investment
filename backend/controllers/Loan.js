@@ -33,7 +33,7 @@ const createLoan = async (req, res) => {
       interest,
       loanEndDate,
       totalPayment: 0,
-      duePayment: amount + (amount * interest / 100),
+     
       fine: 0,
       createDate: Date.now(),
     });
@@ -107,7 +107,7 @@ const updateLoan = async (req, res) => {
       interest,
       loanEndDate,
       fine,
-      duePayment: amount + (amount * interest / 100),
+   
     };
 
     const updatedLoan = await Loan.findByIdAndUpdate(req.params.id, updatedData, { new: true });
