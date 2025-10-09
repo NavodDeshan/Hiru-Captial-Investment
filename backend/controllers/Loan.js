@@ -3,10 +3,46 @@ const Loan = require('../models/Loan'); // Adjust the path as needed
 // Create a new loan
 const createLoan = async (req, res) => {
   try {
-    const { CustomerID, fullname, email, nic, garantter1, garantter1id, garantter1address, garantter2, garantter2id, garantter2address, amount, installment, installmentrate, interest, loanEndDate } = req.body;
+    const {
+      CustomerID,
+      fullname,
+      email,
+      nic,
+      garantter1,
+      garantter1id,
+      garantter1address,
+      garantter2,
+      garantter2id,
+      garantter2address,
+      amount,
+      installment,
+      installmentrate,
+      interest,
+      loanEndDate,
+      loanDuration,
+      loanType,
+    } = req.body;
 
     // Validate required fields
-    if (!CustomerID || !fullname || !email || !nic || !garantter1 || !garantter1id || !garantter1address || !garantter2 || !garantter2id || !garantter2address || !amount || !installment || !installmentrate || !interest || !loanEndDate) {
+    if (
+      !CustomerID ||
+      !fullname ||
+      !email ||
+      !nic ||
+      !garantter1 ||
+      !garantter1id ||
+      !garantter1address ||
+      !garantter2 ||
+      !garantter2id ||
+      !garantter2address ||
+      !amount ||
+      !installment ||
+      !installmentrate ||
+      !interest ||
+      !loanEndDate ||
+      !loanDuration ||
+      !loanType
+    ) {
       return res.status(400).json({ message: 'All fields are required!' });
     }
 
@@ -32,8 +68,9 @@ const createLoan = async (req, res) => {
       installmentrate,
       interest,
       loanEndDate,
+      loanDuration,
+      loanType,
       totalPayment: 0,
-     
       fine: 0,
       createDate: Date.now(),
     });
@@ -88,7 +125,27 @@ const getLoanById = async (req, res) => {
 // Update a loan
 const updateLoan = async (req, res) => {
   try {
-    const { CustomerID, fullname, email, nic, garantter1, garantter1id, garantter1address, garantter2, garantter2id, garantter2address, amount, installment, installmentrate, interest, loanEndDate, fine } = req.body;
+    const {
+      CustomerID,
+      fullname,
+      email,
+      nic,
+      garantter1,
+      garantter1id,
+      garantter1address,
+      garantter2,
+      garantter2id,
+      garantter2address,
+      amount,
+      installment,
+      installmentrate,
+      interest,
+      loanEndDate,
+      loanDuration,
+      loanType,
+      fine,
+      totalPayment,
+    } = req.body;
 
     const updatedData = {
       CustomerID,
@@ -106,8 +163,10 @@ const updateLoan = async (req, res) => {
       installmentrate,
       interest,
       loanEndDate,
+      loanDuration,
+      loanType,
       fine,
-   
+      totalPayment,
     };
 
     const updatedLoan = await Loan.findByIdAndUpdate(req.params.id, updatedData, { new: true });

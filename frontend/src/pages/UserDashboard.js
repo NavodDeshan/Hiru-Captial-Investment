@@ -79,8 +79,8 @@ const UserDashboard = () => {
 
       {/* User Actions Section */}
       <div className="user-actions">
-        <Link to="/AddLoan" className="user-action">Add Loans</Link>
         <Link to="/AddPayment" className="user-action">Add Payment</Link>
+        <Link to="/ViewAllCustomers" className="user-action">View All Customers</Link>
       </div>
 
      

@@ -73,11 +73,20 @@ const LoanSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  loanDuration: { // Duration in days or weeks depending on loanType
+    type: Number,
+    required: true,
+  },
+  loanType: { // 'Daily' or 'Weekly'
+    type: String,
+    required: true,
+    enum: ['Daily', 'Weekly'],
+  },
 });
 
 // Virtual for duePayment
 LoanSchema.virtual('duePayment').get(function() {
-  return this.amount + (this.amount * (this.installmentrate / 100)) - this.totalPayment;
+  return this.amount + this.calculateInterest() - this.totalPayment;
 });
 
 // Ensure virtuals are included in JSON output
@@ -93,6 +102,19 @@ LoanSchema.methods.calculateFine = function() {
     this.fine = daysPastDue * (this.amount * 0.02);
   } else {
     this.fine = 0;
+  }
+};
+
+// Method to calculate interest based on loan type
+LoanSchema.methods.calculateInterest = function() {
+  if (this.loanType === 'Daily') {
+    // interest = principal * (rate/100) * duration (in days)
+    return this.amount * (this.installmentrate / 100) * this.loanDuration;
+  } else if (this.loanType === 'Weekly') {
+    // interest = principal * (rate/100) * duration (in weeks)
+    return this.amount * (this.installmentrate / 100) * this.loanDuration;
+  } else {
+    return 0;
   }
 };
 
