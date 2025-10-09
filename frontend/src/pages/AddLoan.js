@@ -20,6 +20,8 @@ const AddLoan = () => {
     interest: '',
     loanEndDate: '',
     createDate: new Date().toISOString().split('T')[0], // Default to today's date
+    loanDuration: '',
+    loanType: '', // New field
   });
   const [customers, setCustomers] = useState([]);
   const [statusMessage, setStatusMessage] = useState({ type: '', text: '' });
@@ -82,6 +84,8 @@ const AddLoan = () => {
         interest: '',
         loanEndDate: '',
         createDate: new Date().toISOString().split('T')[0], // Reset to today's date
+        loanDuration: '',
+        loanType: '',
       });
     } catch (error) {
       console.error('Error:', error);
@@ -249,6 +253,36 @@ const AddLoan = () => {
             required
           />
         </div>
+        {/* New: Loan Type */}
+        <div className="form-group">
+          <label htmlFor="loanType">Loan Type</label>
+          <select
+            id="loanType"
+            name="loanType"
+            value={formData.loanType}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Loan Type</option>
+            <option value="Daily">Daily</option>
+            <option value="Weekly">Weekly</option>
+          </select>
+        </div>
+        {/* New: Loan Duration */}
+        <div className="form-group">
+          <label htmlFor="loanDuration">
+            Loan Duration ({formData.loanType === 'Weekly' ? 'Weeks' : 'Days'})
+          </label>
+          <input
+            type="number"
+            id="loanDuration"
+            name="loanDuration"
+            value={formData.loanDuration}
+            onChange={handleChange}
+            required
+            min="1"
+          />
+        </div>
         <div className="form-group">
           <label htmlFor="createDate">Create Date</label>
           <input
@@ -271,7 +305,6 @@ const AddLoan = () => {
             required
           />
         </div>
-        
         <button type="submit">Add Loan</button>
       </form>
     </div>

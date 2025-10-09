@@ -121,6 +121,18 @@ const ViewAllLoans = () => {
                 <input type="number" name="interest" value={editLoan.interest} onChange={handleChange} required />
               </label>
               <label>
+                Loan Type:
+                <select name="loanType" value={editLoan.loanType} onChange={handleChange} required>
+                  <option value="">Select Loan Type</option>
+                  <option value="Daily">Daily</option>
+                  <option value="Weekly">Weekly</option>
+                </select>
+              </label>
+              <label>
+                Loan Duration ({editLoan.loanType === 'Weekly' ? 'Weeks' : 'Days'}):
+                <input type="number" name="loanDuration" value={editLoan.loanDuration} onChange={handleChange} required min="1" />
+              </label>
+              <label>
                 Loan End Date:
                 <input type="date" name="loanEndDate" value={editLoan.loanEndDate} onChange={handleChange} required />
               </label>
@@ -162,6 +174,8 @@ const ViewAllLoans = () => {
                 <th>Installment</th>
                 <th>Installment Rate</th>
                 <th>Interest</th>
+                <th>Loan Type</th>
+                <th>Loan Duration</th>
                 <th>Loan End Date</th>
                 <th>Total Payment</th>
                 <th>Due Payment</th>
@@ -188,6 +202,8 @@ const ViewAllLoans = () => {
                   <td>{loan.installment}</td>
                   <td>{loan.installmentrate}</td>
                   <td>{loan.interest}</td>
+                  <td>{loan.loanType}</td>
+                  <td>{loan.loanDuration}</td>
                   <td>{loan.loanEndDate}</td>
                   <td>{loan.totalPayment}</td>
                   <td>{loan.duePayment}</td>
