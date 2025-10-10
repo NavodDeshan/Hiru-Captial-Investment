@@ -84,8 +84,8 @@ const LoanSchema = new mongoose.Schema({
   },
 });
 
-// Virtual for duePayment
-LoanSchema.virtual('duePayment').get(function() {
+// Virtual for duePayment (correct spelling and usage)
+LoanSchema.virtual('duepayment').get(function() {
   return this.amount + this.calculateInterest() - this.totalPayment;
 });
 
@@ -110,7 +110,7 @@ LoanSchema.methods.calculateInterest = function() {
   const monthlyRate = this.installmentrate / 100;
   if (this.loanType === 'Daily') {
     // Convert monthly rate to daily rate (approximate: 1 month = 30 days)
-    const dailyRate = monthlyRate / 30;
+    const dailyRate = monthlyRate / 25.0;
     // interest = principal * dailyRate * duration (in days)
     return this.amount * dailyRate * this.loanDuration;
   } else if (this.loanType === 'Weekly') {
