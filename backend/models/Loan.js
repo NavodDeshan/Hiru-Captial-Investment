@@ -115,7 +115,7 @@ LoanSchema.methods.calculateInterest = function() {
     return this.amount * dailyRate * this.loanDuration;
   } else if (this.loanType === 'Weekly') {
     // Convert monthly rate to weekly rate (approximate: 1 month = 4.345 weeks)
-    const weeklyRate = monthlyRate / 4.345;
+    const weeklyRate = monthlyRate / 4;
     // interest = principal * weeklyRate * duration (in weeks)
     return this.amount * weeklyRate * this.loanDuration;
   } else {
