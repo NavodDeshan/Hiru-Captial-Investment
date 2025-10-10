@@ -58,18 +58,6 @@ const ViewAllCustomers = () => {
               <p><strong>Birthday:</strong> {new Date(customer.birthday).toLocaleDateString()}</p>
               <p><strong>Address:</strong> {customer.address}</p>
               <p><strong>ID Number:</strong> {customer.idNumber}</p>
-              {customer.idImage && (
-                <div className="image-section">
-                  <strong>ID Image:</strong>
-                  <img src={`https://hiru-captial-investment.onrender.com/${customer.idImage}`} alt={`${customer.fullName}'s ID`} />
-                </div>
-              )}
-              {customer.electricityBillImage && (
-                <div className="image-section">
-                  <strong>Electricity Bill:</strong>
-                  <img src={`https://hiru-captial-investment.onrender.com/${customer.electricityBillImage}`} alt={`${customer.fullName}'s Electricity Bill`} />
-                </div>
-              )}
               {/* Button to fetch payment history */}
               <button
                 className="view-payments-button"
