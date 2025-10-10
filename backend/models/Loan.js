@@ -107,12 +107,17 @@ LoanSchema.methods.calculateFine = function() {
 
 // Method to calculate interest based on loan type
 LoanSchema.methods.calculateInterest = function() {
+  const monthlyRate = this.installmentrate / 100;
   if (this.loanType === 'Daily') {
-    // interest = principal * (rate/100) * duration (in days)
-    return this.amount * (this.installmentrate / 100) * this.loanDuration;
+    // Convert monthly rate to daily rate (approximate: 1 month = 30 days)
+    const dailyRate = monthlyRate / 30;
+    // interest = principal * dailyRate * duration (in days)
+    return this.amount * dailyRate * this.loanDuration;
   } else if (this.loanType === 'Weekly') {
-    // interest = principal * (rate/100) * duration (in weeks)
-    return this.amount * (this.installmentrate / 100) * this.loanDuration;
+    // Convert monthly rate to weekly rate (approximate: 1 month = 4.345 weeks)
+    const weeklyRate = monthlyRate / 4.345;
+    // interest = principal * weeklyRate * duration (in weeks)
+    return this.amount * weeklyRate * this.loanDuration;
   } else {
     return 0;
   }
