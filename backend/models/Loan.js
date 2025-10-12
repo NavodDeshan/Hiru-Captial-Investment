@@ -93,13 +93,30 @@ LoanSchema.virtual('duePayment').get(function() {
 LoanSchema.set('toJSON', { virtuals: true });
 LoanSchema.set('toObject', { virtuals: true });
 
-// Method to calculate fine
+// Method to calculate fine based on missed installments
 LoanSchema.methods.calculateFine = function() {
   const today = new Date();
-  const loanEndDate = new Date(this.loanEndDate);
-  const daysPastDue = Math.floor((today - loanEndDate) / (1000 * 60 * 60 * 24));
-  if (daysPastDue > 0) {
-    this.fine = daysPastDue * (this.amount * 0.02);
+  const startDate = new Date(this.createDate);
+
+  let periodsPassed = 0;
+  if (this.loanType === 'Daily') {
+    periodsPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+  } else if (this.loanType === 'Weekly') {
+    periodsPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24 * 7));
+  }
+
+  // Number of installments expected up to today (cannot exceed loanDuration)
+  const expectedPayments = Math.min(periodsPassed, this.loanDuration);
+
+  // Calculate how many installments have been paid
+  const paidInstallments = Math.floor(this.totalPayment / this.installment);
+
+  // Missed installments
+  const missedInstallments = expectedPayments - paidInstallments;
+
+  // Fine: 2% of installment amount per missed installment (adjust as needed)
+  if (missedInstallments > 0) {
+    this.fine = missedInstallments * (this.installment * 0.02);
   } else {
     this.fine = 0;
   }
