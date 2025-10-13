@@ -41,18 +41,41 @@ const AddLoan = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData((prevData) => {
+      const updatedData = { ...prevData, [name]: value };
 
-    if (name === 'fullname') {
-      const selectedCustomer = customers.find((customer) => customer.fullName === value);
-      if (selectedCustomer) {
-        setFormData((prevData) => ({
-          ...prevData,
-          CustomerID: selectedCustomer._id,
-          nic: selectedCustomer.idNumber,
-        }));
+      // Auto-calculate interest when relevant fields change
+      const amount = parseFloat(name === 'amount' ? value : updatedData.amount);
+      const installmentrate = parseFloat(name === 'installmentrate' ? value : updatedData.installmentrate);
+      const loanDuration = parseFloat(name === 'loanDuration' ? value : updatedData.loanDuration);
+      const loanType = name === 'loanType' ? value : updatedData.loanType;
+
+      if (!isNaN(amount) && !isNaN(installmentrate) && !isNaN(loanDuration) && loanType) {
+        const monthlyRate = installmentrate / 100;
+        let interest = 0;
+        if (loanType === 'Daily') {
+          const dailyRate = monthlyRate / 25;
+          interest = amount * dailyRate * loanDuration;
+        } else if (loanType === 'Weekly') {
+          const weeklyRate = monthlyRate / 4;
+          interest = amount * weeklyRate * loanDuration;
+        }
+        updatedData.interest = interest.toFixed(2);
+      } else {
+        updatedData.interest = '';
       }
-    }
+
+      // Auto-fill customer info if fullname changes
+      if (name === 'fullname') {
+        const selectedCustomer = customers.find((customer) => customer.fullName === value);
+        if (selectedCustomer) {
+          updatedData.CustomerID = selectedCustomer._id;
+          updatedData.nic = selectedCustomer.idNumber;
+        }
+      }
+
+      return updatedData;
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -230,30 +253,7 @@ const AddLoan = () => {
             onChange={handleChange}
             required
           />
-        </div>
-        <div className="form-group">
-          <label htmlFor="installmentrate">Installment Rate</label>
-          <input
-            type="number"
-            id="installmentrate"
-            name="installmentrate"
-            value={formData.installmentrate}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="interest">Interest</label>
-          <input
-            type="number"
-            id="interest"
-            name="interest"
-            value={formData.interest}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        {/* New: Loan Type */}
+            {/* New: Loan Type */}
         <div className="form-group">
           <label htmlFor="loanType">Loan Type</label>
           <select
@@ -268,8 +268,9 @@ const AddLoan = () => {
             <option value="Weekly">Weekly</option>
           </select>
         </div>
-        {/* New: Loan Duration */}
-        <div className="form-group">
+        </div>
+          {/* New: Loan Duration */}
+                <div className="form-group">
           <label htmlFor="loanDuration">
             Loan Duration ({formData.loanType === 'Weekly' ? 'Weeks' : 'Days'})
           </label>
@@ -283,6 +284,31 @@ const AddLoan = () => {
             min="1"
           />
         </div>
+        <div className="form-group">
+          <label htmlFor="installmentrate">Installment Rate</label>
+          <input
+            type="number"
+            id="installmentrate"
+            name="installmentrate"
+            value={formData.installmentrate}
+            onChange={handleChange}
+            required
+          />
+       
+        </div>
+        <div className="form-group">
+          <label htmlFor="interest">Interest</label>
+          <input
+            type="number"
+            id="interest"
+            name="interest"
+            value={formData.interest}
+            onChange={handleChange}
+            required
+          />
+        </div>
+      
+   
         <div className="form-group">
           <label htmlFor="createDate">Create Date</label>
           <input
