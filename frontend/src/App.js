@@ -1,101 +1,53 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import logo from './logo.svg';
 import './App.css';
+
 import Login from './pages/Login.js';
-import Register from './pages/Register';
-import Home from './pages/Home';
-import Layout from './pages/Layout';
-import AddLoan from './pages/AddLoan';
+import Register from './pages/Register.js';
+import Home from './pages/Home.js';
+import Layout from './pages/Layout.js';
+import AddLoan from './pages/AddLoan.js';
 import AddCustomers from './pages/AddCustomers.js';
 import ViewAllCustomers from './pages/ViweAllCustomers.js';
 import ViewAllUsers from './pages/ViewAllUsers.js';
 import ViewAllLoans from './pages/ViewAllLoans.js';
 import AddPayment from './pages/AddPayment.js';
 import ViewAllPayments from './pages/ViewAllPayments.js';
-import AdminDashboard from './pages/AdminDashboard';
-import UserDashboard from './pages/UserDashboard'; // Import UserDashboard
+import AdminDashboard from './pages/AdminDashboard.js';
+import UserDashboard from './pages/UserDashboard.js';
 
-// Define your router with the Login route
 const router = createBrowserRouter([
+  // Public routes (no sidebar)
   {
     path: '/',
-    element: <Layout />, // Use Layout for all routes
-    children: [
-      {
-        path: '/Home', // Home page
-        element: <Home />,
-      },
-      {
-        path: '/', // Login page
-        element: <Login />,
-      },
-      {
-        path: '/register', // Register page
-        element: <Register />,
-      },
+    element: <Login />,
+  },
+  {
+    path: '/register',
+    element: <Register />,
+  },
 
-      {
-        path: '/AddLoan', // Register page
-        element: <AddLoan />,
-      },
-      {
-        path: '/AddCustomers', // Register page
-        element: <AddCustomers />,
-      },
-      {
-        path: '/ViewAllCustomers', // Register page
-        element: <ViewAllCustomers />,
-      },
-      {
-        path: '/ViewAllUsers', // Register page
-        element: <ViewAllUsers />,
-      },
-      {
-        path: '/ViewAllLoans', // Register page
-        element: <ViewAllLoans />,
-      },
-      {
-        path: '/AddPayment', // Register page
-        element: <AddPayment />,
-      },
-      {
-        path: '/ViewAllPayments', // Register page
-        element: <ViewAllPayments />,
-      },
-      {
-        path: '/admin-dashboard', // Admin Dashboard page
-        element: <AdminDashboard />,
-      },
-      {
-        path: '/user-dashboard', // User Dashboard page
-        element: <UserDashboard />,
-      },
+  // Protected routes inside layout (with sidebar + navbar)
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      { path: 'Home', element: <Home /> },
+      { path: 'AddLoan', element: <AddLoan /> },
+      { path: 'AddCustomers', element: <AddCustomers /> },
+      { path: 'ViewAllCustomers', element: <ViewAllCustomers /> },
+      { path: 'ViewAllUsers', element: <ViewAllUsers /> },
+      { path: 'ViewAllLoans', element: <ViewAllLoans /> },
+      { path: 'AddPayment', element: <AddPayment /> },
+      { path: 'ViewAllPayments', element: <ViewAllPayments /> },
+      { path: 'admin-dashboard', element: <AdminDashboard /> },
+      { path: 'user-dashboard', element: <UserDashboard /> },
     ],
   },
 ]);
 
 function App() {
-  return (
-    <RouterProvider router={router}>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    </RouterProvider>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

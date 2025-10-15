@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './../css/NavigationBar.css'; // Include CSS for styling
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'; // NEW
 
 const NavigationBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token')); // Track login status
@@ -27,18 +28,25 @@ const NavigationBar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <Link to="/" className="navbar-logo">
+        {/* <Link to="/" className="navbar-logo">
           Hiru Capital Investment
-        </Link>
+        </Link> */}
       </div>
       <ul className="navbar-links">
         {isLoggedIn ? (
-          // Show only Logout button if the user is logged in
-          <li>
-            <button className="navbar-link logout-button" onClick={handleLogout}>
-              Logout
-            </button>
-          </li>
+          // Show profile icon + Logout button if the user is logged in
+          <>
+            <li>
+              <Link to="/admin-dashboard" className="profile-link" title="Profile">
+                <AccountCircleIcon />
+              </Link>
+            </li>
+            <li>
+              <button className="navbar-link logout-button" onClick={handleLogout}>
+                Logout
+              </button>
+            </li>
+          </>
         ) : (
           // Show only Login and Register links if the user is not logged in
           <>

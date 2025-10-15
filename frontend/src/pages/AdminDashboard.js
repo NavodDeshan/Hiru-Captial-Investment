@@ -22,7 +22,7 @@ const AdminDashboard = () => {
           return;
         }
 
-        const response = await axios.get(`http://localhost:5000/api/users/user/profile/${id}`, {
+        const response = await axios.get(`https://hiru-captial-investment.onrender.com/api/users/user/profile/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -52,12 +52,26 @@ const AdminDashboard = () => {
     <div className="admin-dashboard">
       <h1>Admin Dashboard</h1>
 
-      {/* Admin Profile Section */}
+      {/* Admin Profile Section - show as readonly form */}
       <div className="admin-profile">
         <h2>Admin Profile</h2>
-        <p><strong>Username:</strong> {admin.username}</p>
-        <p><strong>Email:</strong> {admin.email}</p>
-        <p><strong>Role:</strong> {admin.role}</p>
+
+        <form className="admin-profile-form" aria-label="Admin profile (read only)">
+          <label>
+            Username
+            <input type="text" value={admin.username || ''} readOnly />
+          </label>
+
+          <label>
+            Email
+            <input type="email" value={admin.email || ''} readOnly />
+          </label>
+
+          <label>
+            Role
+            <input type="text" value={admin.role || ''} readOnly />
+          </label>
+        </form>
       </div>
 
       {/* Admin Actions Section */}
