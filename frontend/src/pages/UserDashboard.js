@@ -1,61 +1,57 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Import axios for API requests
-import './../css/UserDashboard.css'; // Ensure you have a CSS file for styling
+import axios from 'axios';
+import './../css/AdminDashboard.css'; // Reusing AdminDashboard.css for consistent styling
 
 const UserDashboard = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const navigate = useNavigate(); // For redirection
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        // Retrieve id and token from local storage
         const id = localStorage.getItem('id');
         const token = localStorage.getItem('token');
 
-        console.log('Retrieved ID:', id); // Debugging: Check if ID is retrieved
-        console.log('Retrieved Token:', token); // Debugging: Check if Token is retrieved
+        console.log('Retrieved ID:', id);
+        console.log('Retrieved Token:', token);
 
         if (!id || !token) {
           setError('User ID or token not found. Redirecting to login...');
           setLoading(false);
-          setTimeout(() => navigate('/'), 2000); // Redirect to login after 2 seconds
+          setTimeout(() => navigate('/'), 2000);
           return;
         }
 
-        // Fetch user profile using id
         const response = await axios.get(`https://hiru-captial-investment.onrender.com/api/users/user/profile/${id}`, {
           headers: {
-            Authorization: `Bearer ${token}`, // Include token in the request
+            Authorization: `Bearer ${token}`,
           },
         });
 
-        console.log('User Profile Response:', response.data); // Debugging: Check API response
-        setUser(response.data); // Set the user data
-        setLoading(false); // Set loading to false
+        console.log('User Profile Response:', response.data);
+        setUser(response.data);
+        setLoading(false);
       } catch (err) {
-        console.error('Error fetching user profile:', err); // Debugging: Log the error
+        console.error('Error fetching user profile:', err);
 
         if (err.response && err.response.status === 404) {
           setError('User profile not found. Please check your account.');
         } else if (err.response && err.response.status === 401) {
           setError('Unauthorized. Please log in again.');
-          setTimeout(() => navigate('/'), 2000); // Redirect to login after 2 seconds
+          setTimeout(() => navigate('/'), 2000);
         } else {
           setError('Failed to fetch user profile. Please try again later.');
         }
 
-        setLoading(false); // Set loading to false even if there's an error
+        setLoading(false);
       }
     };
 
     fetchUserProfile();
-  }, [navigate]); // Include navigate in dependency array
-
- 
+  }, [navigate]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -66,25 +62,37 @@ const UserDashboard = () => {
   }
 
   return (
-    <div className="user-dashboard">
+    <div className="admin-dashboard"> {/* Using admin-dashboard class for consistency */}
       <h1>User Dashboard</h1>
 
       {/* User Profile Section */}
-      <div className="user-profile">
+      <div className="admin-profile">
         <h2>User Profile</h2>
-        <p><strong>Username:</strong> {user.username}</p>
-        <p><strong>Email:</strong> {user.email}</p>
-        <p><strong>Role:</strong> {user.role}</p>
+        <form className="admin-profile-form" aria-label="User profile (read only)">
+          <label>
+            Username
+            <input type="text" value={user.username || ''} readOnly />
+          </label>
+          <label>
+            Email
+            <input type="email" value={user.email || ''} readOnly />
+          </label>
+          <label>
+            Role
+            <input type="text" value={user.role || ''} readOnly />
+          </label>
+        </form>
       </div>
 
       {/* User Actions Section */}
-      <div className="user-actions">
-        <Link to="/AddLoan" className="user-action">Add Loans</Link>
-        <Link to="/AddPayment" className="user-action">Add Payment</Link>
+      <div className="admin-actions">
+        <Link to="/AddLoan" className="admin-action">
+          <span>Add Loans</span>
+        </Link>
+        <Link to="/AddPayment" className="admin-action">
+          <span>Add Payment</span>
+        </Link>
       </div>
-
-     
-      
     </div>
   );
 };

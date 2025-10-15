@@ -2,8 +2,8 @@
 .Home {
     display: flex;
     flex-direction: column;
-    margin-top: 20px;   
-    justify-content: center;
+    margin-top: 60px;   
+    justify-content: relative;
     min-height: 70vh;
     background-color: #f8fafc;
     font-family: 'Arial', sans-serif;
