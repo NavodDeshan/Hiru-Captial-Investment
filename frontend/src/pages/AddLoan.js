@@ -20,8 +20,6 @@ const AddLoan = () => {
     interest: '',
     loanEndDate: '',
     createDate: new Date().toISOString().split('T')[0], // Default to today's date
-    loanDuration: '',
-    loanType: '', // New field
   });
   const [customers, setCustomers] = useState([]);
   const [statusMessage, setStatusMessage] = useState({ type: '', text: '' });
@@ -29,7 +27,7 @@ const AddLoan = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/customers');
+        const response = await axios.get('https://hiru-captial-investment.onrender.com/api/customers');
         setCustomers(response.data);
       } catch (error) {
         console.error('Error fetching customers:', error);
@@ -41,47 +39,24 @@ const AddLoan = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => {
-      const updatedData = { ...prevData, [name]: value };
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
 
-      // Auto-calculate interest when relevant fields change
-      const amount = parseFloat(name === 'amount' ? value : updatedData.amount);
-      const installmentrate = parseFloat(name === 'installmentrate' ? value : updatedData.installmentrate);
-      const loanDuration = parseFloat(name === 'loanDuration' ? value : updatedData.loanDuration);
-      const loanType = name === 'loanType' ? value : updatedData.loanType;
-
-      if (!isNaN(amount) && !isNaN(installmentrate) && !isNaN(loanDuration) && loanType) {
-        const monthlyRate = installmentrate / 100;
-        let interest = 0;
-        if (loanType === 'Daily') {
-          const dailyRate = monthlyRate / 25;
-          interest = amount * dailyRate * loanDuration;
-        } else if (loanType === 'Weekly') {
-          const weeklyRate = monthlyRate / 4;
-          interest = amount * weeklyRate * loanDuration;
-        }
-        updatedData.interest = interest.toFixed(2);
-      } else {
-        updatedData.interest = '';
+    if (name === 'fullname') {
+      const selectedCustomer = customers.find((customer) => customer.fullName === value);
+      if (selectedCustomer) {
+        setFormData((prevData) => ({
+          ...prevData,
+          CustomerID: selectedCustomer._id,
+          nic: selectedCustomer.idNumber,
+        }));
       }
-
-      // Auto-fill customer info if fullname changes
-      if (name === 'fullname') {
-        const selectedCustomer = customers.find((customer) => customer.fullName === value);
-        if (selectedCustomer) {
-          updatedData.CustomerID = selectedCustomer._id;
-          updatedData.nic = selectedCustomer.idNumber;
-        }
-      }
-
-      return updatedData;
-    });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/loan/createLoan', formData, {
+      const response = await axios.post('https://hiru-captial-investment.onrender.com/api/loan/createLoan', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -107,8 +82,6 @@ const AddLoan = () => {
         interest: '',
         loanEndDate: '',
         createDate: new Date().toISOString().split('T')[0], // Reset to today's date
-        loanDuration: '',
-        loanType: '',
       });
     } catch (error) {
       console.error('Error:', error);
@@ -253,36 +226,6 @@ const AddLoan = () => {
             onChange={handleChange}
             required
           />
-            {/* New: Loan Type */}
-        <div className="form-group">
-          <label htmlFor="loanType">Loan Type</label>
-          <select
-            id="loanType"
-            name="loanType"
-            value={formData.loanType}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Loan Type</option>
-            <option value="Daily">Daily</option>
-            <option value="Weekly">Weekly</option>
-          </select>
-        </div>
-        </div>
-          {/* New: Loan Duration */}
-                <div className="form-group">
-          <label htmlFor="loanDuration">
-            Loan Duration ({formData.loanType === 'Weekly' ? 'Weeks' : 'Days'})
-          </label>
-          <input
-            type="number"
-            id="loanDuration"
-            name="loanDuration"
-            value={formData.loanDuration}
-            onChange={handleChange}
-            required
-            min="1"
-          />
         </div>
         <div className="form-group">
           <label htmlFor="installmentrate">Installment Rate</label>
@@ -294,7 +237,6 @@ const AddLoan = () => {
             onChange={handleChange}
             required
           />
-       
         </div>
         <div className="form-group">
           <label htmlFor="interest">Interest</label>
@@ -307,8 +249,6 @@ const AddLoan = () => {
             required
           />
         </div>
-      
-   
         <div className="form-group">
           <label htmlFor="createDate">Create Date</label>
           <input
@@ -331,6 +271,7 @@ const AddLoan = () => {
             required
           />
         </div>
+        
         <button type="submit">Add Loan</button>
       </form>
     </div>

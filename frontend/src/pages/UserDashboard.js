@@ -27,7 +27,7 @@ const UserDashboard = () => {
         }
 
         // Fetch user profile using id
-        const response = await axios.get(`http://localhost:5000/api/users/user/profile/${id}`, {
+        const response = await axios.get(`https://hiru-captial-investment.onrender.com/api/users/user/profile/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`, // Include token in the request
           },
@@ -79,8 +79,8 @@ const UserDashboard = () => {
 
       {/* User Actions Section */}
       <div className="user-actions">
+        <Link to="/AddLoan" className="user-action">Add Loans</Link>
         <Link to="/AddPayment" className="user-action">Add Payment</Link>
-        <Link to="/ViewAllCustomers" className="user-action">View All Customers</Link>
       </div>
 
      

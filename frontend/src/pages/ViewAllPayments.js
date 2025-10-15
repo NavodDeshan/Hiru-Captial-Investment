@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './../css/ViewAllPayments.css'; // Correct path to ViewAllPayments.css
 import withAdminAuth from './withAdminAuth'; // Correct import path
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const ViewAllPayments = () => {
   const [payments, setPayments] = useState([]);
@@ -16,7 +17,7 @@ const ViewAllPayments = () => {
           throw new Error('Authentication token is missing.');
         }
 
-        const response = await axios.get('http://localhost:5000/api/payment', {
+        const response = await axios.get('https://hiru-captial-investment.onrender.com/api/payment', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -42,7 +43,7 @@ const ViewAllPayments = () => {
         throw new Error('Authentication token is missing.');
       }
 
-      await axios.delete(`http://localhost:5000/api/payment/${id}`, {
+      await axios.delete(`https://hiru-captial-investment.onrender.com/api/payment/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -68,8 +69,9 @@ const ViewAllPayments = () => {
         <table>
           <thead>
             <tr>
-              <th>Payment ID</th>
-              <th>Loan ID</th>
+              {/* <th>Payment ID</th>
+              <th>Loan ID</th> */}
+              <th>No</th> {/* sequence column */}
               <th>Customer Name</th>
               <th>Customer Address</th>
               <th>ID Number</th>
@@ -80,18 +82,26 @@ const ViewAllPayments = () => {
             </tr>
           </thead>
           <tbody>
-            {payments.map((payment) => (
+            {payments.map((payment, index) => (
               <tr key={payment._id}>
-                <td>{payment._id}</td>
-                <td>{payment.LoanID}</td>
+                {/* <td>{payment._id}</td>
+                <td>{payment.LoanID}</td> */}
+                <td className="seq-col">{index + 1}</td> {/* sequence cell */}
                 <td>{payment.customerID?.fullName || 'N/A'}</td> {/* Display customer name */}
                 <td>{payment.customerID?.address || 'N/A'}</td> {/* Display customer address */}
                 <td>{payment.idNumber}</td>
                 <td>{payment.Amount}</td>
                 <td>{payment.RiderID || 'N/A'}</td>
                 <td>{payment.date ? new Date(payment.date).toLocaleDateString() : 'N/A'}</td> {/* Display formatted date */}
-                <td>
-                  <button onClick={() => handleDelete(payment._id)}>Delete</button>
+                <td className="actions-cell">
+                  <button
+                    className="icon-btn delete"
+                    onClick={() => handleDelete(payment._id)}
+                    title="Delete"
+                    aria-label="Delete payment"
+                  >
+                    <DeleteIcon />
+                  </button>
                 </td>
               </tr>
             ))}

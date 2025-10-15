@@ -53,7 +53,7 @@ const AddCustomers = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/customers', {
+      const response = await fetch('https://hiru-captial-investment.onrender.com/api/customers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -96,7 +96,17 @@ const AddCustomers = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit}>
+      {/* changed: force single-column layout */}
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          maxWidth: '600px',
+          margin: '0 auto'
+        }}
+      >
         <label>
           Full Name:
           <input
