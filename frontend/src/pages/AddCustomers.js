@@ -96,7 +96,17 @@ const AddCustomers = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit}>
+      {/* changed: force single-column layout */}
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          maxWidth: '600px',
+          margin: '0 auto'
+        }}
+      >
         <label>
           Full Name:
           <input
