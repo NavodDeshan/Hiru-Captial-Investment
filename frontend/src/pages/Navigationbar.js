@@ -5,6 +5,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const NavigationBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+  // eslint-disable-next-line no-unused-vars
   const [userRole, setUserRole] = useState(null); // Track user role
   const navigate = useNavigate(); // For programmatic navigation
 
