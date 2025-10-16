@@ -67,7 +67,7 @@ const LoanSchema = new mongoose.Schema({
   },
   createDate: {
     type: Date,
-    default: Date.now,
+    required: true,
   },
   loanEndDate: {
     type: Date,

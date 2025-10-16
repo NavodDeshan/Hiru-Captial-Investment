@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './../css/AddLoan.css'; // Correct path to AddLoan.css
+import './../css/AddLoan.css';
 
 const AddLoan = () => {
   const [formData, setFormData] = useState({
@@ -17,20 +17,23 @@ const AddLoan = () => {
     amount: '',
     installment: '',
     installmentrate: '',
-    loanType: '', // ✅ Added field
-    loanDuration: '', // ✅ Added for duration calculation
+    loanType: '',
+    loanDuration: '',
     interest: '',
     loanEndDate: '',
-    createDate: new Date().toISOString().split('T')[0],
+    createDate: '', // ✅ user selects manually
   });
 
   const [customers, setCustomers] = useState([]);
   const [statusMessage, setStatusMessage] = useState({ type: '', text: '' });
 
+  // ✅ Fetch customers on mount
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await axios.get('https://hiru-captial-investment.onrender.com/api/customers');
+        const response = await axios.get(
+          'https://hiru-captial-investment.onrender.com/api/customers'
+        );
         setCustomers(response.data);
       } catch (error) {
         console.error('Error fetching customers:', error);
@@ -40,15 +43,21 @@ const AddLoan = () => {
     fetchCustomers();
   }, []);
 
+  // ✅ Handle field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData((prevData) => {
       const updatedData = { ...prevData, [name]: value };
 
       // Auto-calculate interest
       const amount = parseFloat(name === 'amount' ? value : updatedData.amount);
-      const installmentrate = parseFloat(name === 'installmentrate' ? value : updatedData.installmentrate);
-      const loanDuration = parseFloat(name === 'loanDuration' ? value : updatedData.loanDuration);
+      const installmentrate = parseFloat(
+        name === 'installmentrate' ? value : updatedData.installmentrate
+      );
+      const loanDuration = parseFloat(
+        name === 'loanDuration' ? value : updatedData.loanDuration
+      );
       const loanType = name === 'loanType' ? value : updatedData.loanType;
 
       if (!isNaN(amount) && !isNaN(installmentrate) && !isNaN(loanDuration) && loanType) {
@@ -68,9 +77,11 @@ const AddLoan = () => {
         updatedData.interest = '';
       }
 
-      // Auto-fill customer info
+      // Auto-fill NIC and CustomerID
       if (name === 'fullname') {
-        const selectedCustomer = customers.find((customer) => customer.fullName === value);
+        const selectedCustomer = customers.find(
+          (customer) => customer.fullName === value
+        );
         if (selectedCustomer) {
           updatedData.CustomerID = selectedCustomer._id;
           updatedData.nic = selectedCustomer.idNumber;
@@ -81,15 +92,15 @@ const AddLoan = () => {
     });
   };
 
+  // ✅ Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const response = await axios.post(
         'https://hiru-captial-investment.onrender.com/api/loan/createLoan',
         formData,
-        {
-          headers: { 'Content-Type': 'application/json' },
-        }
+        { headers: { 'Content-Type': 'application/json' } }
       );
 
       setStatusMessage({ type: 'success', text: response.data.message });
@@ -113,13 +124,14 @@ const AddLoan = () => {
         loanDuration: '',
         interest: '',
         loanEndDate: '',
-        createDate: new Date().toISOString().split('T')[0],
+        createDate: '',
       });
     } catch (error) {
       console.error('Error:', error);
       setStatusMessage({
         type: 'error',
-        text: error.response?.data?.message || 'Failed to add loan. Please try again.',
+        text:
+          error.response?.data?.message || 'Failed to add loan. Please try again.',
       });
     }
   };
@@ -135,7 +147,7 @@ const AddLoan = () => {
       )}
 
       <form onSubmit={handleSubmit}>
-        {/* Customer Name */}
+        {/* Customer Selection */}
         <div className="form-group">
           <label htmlFor="fullname">Full Name</label>
           <select
@@ -180,7 +192,7 @@ const AddLoan = () => {
           />
         </div>
 
-        {/* Guarantor Details */}
+        {/* Guarantor 1 */}
         <div className="form-group">
           <label htmlFor="garantter1">Guarantor 1</label>
           <input
@@ -215,6 +227,7 @@ const AddLoan = () => {
           />
         </div>
 
+        {/* Guarantor 2 */}
         <div className="form-group">
           <label htmlFor="garantter2">Guarantor 2</label>
           <input
@@ -286,7 +299,6 @@ const AddLoan = () => {
           />
         </div>
 
-        {/* ✅ Loan Type Dropdown */}
         <div className="form-group">
           <label htmlFor="loanType">Loan Type</label>
           <select
@@ -302,7 +314,6 @@ const AddLoan = () => {
           </select>
         </div>
 
-        {/* Loan Duration */}
         <div className="form-group">
           <label htmlFor="loanDuration">Loan Duration</label>
           <input
@@ -323,11 +334,11 @@ const AddLoan = () => {
             id="interest"
             name="interest"
             value={formData.interest}
-            onChange={handleChange}
             readOnly
           />
         </div>
 
+        {/* ✅ Manually selected dates */}
         <div className="form-group">
           <label htmlFor="createDate">Create Date</label>
           <input
