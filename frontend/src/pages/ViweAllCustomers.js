@@ -76,31 +76,7 @@ const ViewAllCustomers = () => {
   <div className="label">ID Number:</div>
   <div className="value">{customer.idNumber}</div>
 
-  <div className="label">ID Image:</div>
-  <div className="value">
-    {customer.idImage ? (
-      <img
-        src={`https://hiru-captial-investment.onrender.com/${customer.idImage}`}
-        alt={`${customer.fullName}'s ID`}
-        className="info-image"
-      />
-    ) : (
-      'N/A'
-    )}
-  </div>
 
-  <div className="label">Electricity Bill:</div>
-  <div className="value">
-    {customer.electricityBillImage ? (
-      <img
-        src={`https://hiru-captial-investment.onrender.com/${customer.electricityBillImage}`}
-        alt={`${customer.fullName}'s Electricity Bill`}
-        className="info-image"
-      />
-    ) : (
-      'N/A'
-    )}
-  </div>
 </div>
   </div>
 
