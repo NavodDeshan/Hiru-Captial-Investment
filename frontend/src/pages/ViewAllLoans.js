@@ -221,6 +221,11 @@ const ViewAllLoans = () => {
                   <div className="view-field"><label>Interest</label><div className="value">{viewLoan.interest}</div></div>
                   <div className="view-field"><label>Loan End Date</label><div className="value">{formatDate(viewLoan.loanEndDate)}</div></div>
                   <div className="view-field"><label>Create Date</label><div className="value">{formatDate(viewLoan.createDate)}</div></div>
+                  <div className="view-field"><label>Loan Type</label><div className="value">{viewLoan.loanType}</div></div>
+        <div className="view-field"><label>Loan Duration</label><div className="value">{viewLoan.loanDuration}</div></div>
+
+        <div className="view-field"><label>Loan End Date</label><div className="value">{formatDate(viewLoan.loanEndDate)}</div></div>
+        <div className="view-field"><label>Create Date</label><div className="value">{formatDate(viewLoan.createDate)}</div></div>
 
                   <div className="modal-actions">
                     <button type="button" onClick={() => setViewLoan(null)}>Close</button>
